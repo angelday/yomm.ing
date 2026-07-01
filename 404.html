@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Yomm</title>
+</head>
+
+<body>
+  <script>
+    const match = window.location.pathname.match(/^\/connect\/([^/]+)\/?$/);
+
+    if (match) {
+      const params = new URLSearchParams(window.location.search);
+      params.set("code", match[1]);
+      window.location.replace(`/connect/?${params.toString()}`);
+    } else {
+      window.location.replace("/");
+    }
+  </script>
+  <noscript>
+    <p><a href="/">Go to Yomm</a></p>
+  </noscript>
+</body>
+
+</html>

@@ -1,0 +1,17 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "79C8QZUSFP.plastik.Yomm"
+        ],
+        "components": [
+          {
+            "/": "/connect/*",
+            "comment": "Open Yomm friend invitations in the app."
+          }
+        ]
+      }
+    ]
+  }
+}

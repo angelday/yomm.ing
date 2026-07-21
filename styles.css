@@ -1,0 +1,138 @@
+:root {
+  color-scheme: light;
+  background: #fff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 3vmin, 28px);
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: clamp(24px, 5vmin, 64px);
+}
+
+img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  min-height: 0;
+  max-height: calc(100vh - clamp(144px, 22vmin, 230px));
+  max-height: calc(100dvh - clamp(144px, 22vmin, 230px));
+  object-fit: contain;
+}
+
+p {
+  margin: 0;
+  color: #263f57;
+  font-family: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  font-size: clamp(1.5rem, 4.5vmin, 2.75rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  text-align: center;
+}
+
+nav {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  justify-content: center;
+  margin-top: clamp(4px, 1vmin, 10px);
+  font-family: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+nav a {
+  color: #007aff;
+  text-decoration: none;
+}
+
+nav a:focus-visible {
+  border-radius: 6px;
+  outline: 3px solid rgba(0, 122, 255, 0.28);
+  outline-offset: 4px;
+}
+
+.ellipsis {
+  display: inline-block;
+  width: 0.9em;
+  margin-left: 0.04em;
+  text-align: left;
+}
+
+.ellipsis span:nth-child(1) {
+  animation: dot-one 2s step-end infinite;
+}
+
+.ellipsis span:nth-child(2) {
+  animation: dot-two 2s step-end infinite;
+}
+
+.ellipsis span:nth-child(3) {
+  animation: dot-three 2s step-end infinite;
+}
+
+@keyframes dot-one {
+  0%,
+  24% {
+    opacity: 0;
+  }
+
+  25%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes dot-two {
+  0%,
+  49% {
+    opacity: 0;
+  }
+
+  50%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes dot-three {
+  0%,
+  74% {
+    opacity: 0;
+  }
+
+  75%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ellipsis span {
+    animation: none;
+  }
+}

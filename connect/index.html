@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <title>Connect on Yomm</title>
+  <meta name="description" content="Use this friend code to connect on Yomm.">
+  <link rel="stylesheet" href="/connect/connect.css?v=3">
+  <script src="/connect/qrcode.js" defer></script>
+  <script src="/connect/connect.js?v=3" defer></script>
+</head>
+
+<body>
+  <main>
+    <section id="connect-state" class="connect-state">
+      <h1 aria-label="Someone has you on their mind...">
+        Someone has you on their mind<span class="ellipsis"
+          aria-hidden="true"><span>.</span><span>.</span><span>.</span></span>
+      </h1>
+      <div class="steps">
+        <section class="step-card">
+          <span class="step-number">1</span>
+          <h2>Get Yomm</h2>
+          <p class="step-detail">Every journey starts with step one.</p>
+          <a id="app-store-link" class="app-store-button" href="https://apps.apple.com/" rel="noopener">
+            <img src="/assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.png" alt="Download on the App Store">
+          </a>
+        </section>
+
+        <section class="step-card">
+          <span class="step-number">2</span>
+          <h2>Continue on your phone</h2>
+          <p class="step-detail">Install Yomm, then return to your original invite and tap the link again.</p>
+        </section>
+
+        <p class="step-or">or</p>
+
+        <section class="step-card step-card-secondary">
+          <span class="step-number">2b</span>
+          <h2>On a computer?</h2>
+          <p class="step-detail">No problem. Once Yomm is installed, scan this QR code with your phone’s Camera app.</p>
+          <div id="qr-code" class="qr-code" role="img" aria-label="QR code for this Yomm invitation"></div>
+        </section>
+      </div>
+
+      <figure class="encouragement">
+        <img src="/assets/illu_you_got_this.png" alt="A person and cat giving a thumbs-up">
+        <figcaption>You’ve got this!</figcaption>
+      </figure>
+
+      <a class="home-link" href="/">Yomm.ing</a>
+    </section>
+
+    <section id="invalid-state" class="invalid-state" hidden>
+      <img src="/assets/illu_invalid.png" alt="A person and cat puzzled by an invalid QR code">
+      <h1>This friend code isn’t valid.</h1>
+      <p>Ask your friend to send you a new one.</p>
+      <a class="home-link" href="/">Yomm.ing</a>
+    </section>
+  </main>
+</body>
+
+</html>

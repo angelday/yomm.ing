@@ -1,0 +1,282 @@
+:root {
+  color-scheme: light;
+  background: #fff;
+  color: #17293c;
+  font-family: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  font-synthesis: none;
+  --yomm-blue: #008BFF;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: #fff;
+}
+
+main {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: clamp(32px, 6vw, 84px) clamp(18px, 5vw, 72px);
+}
+
+.home-link {
+  display: inline-block;
+  margin-top: clamp(28px, 5vw, 48px);
+  color: var(--yomm-blue);
+  font-size: 1rem;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.home-link:focus-visible {
+  border-radius: 6px;
+  outline: 3px solid rgba(0, 139, 255, 0.28);
+  outline-offset: 4px;
+}
+
+.connect-state {
+  width: min(100%, 640px);
+  margin: 0 auto;
+  text-align: center;
+}
+
+h1 {
+  margin: 0;
+  color: var(--yomm-blue);
+  font-size: clamp(2.5rem, 6.5vw, 5.2rem);
+  font-weight: 750;
+  letter-spacing: -0.055em;
+  line-height: 1;
+  text-align: center;
+}
+
+.ellipsis {
+  display: inline-block;
+  width: 0.9em;
+  margin-left: 0.04em;
+  text-align: left;
+}
+
+.ellipsis span:nth-child(1) {
+  animation: dot-one 2s step-end infinite;
+}
+
+.ellipsis span:nth-child(2) {
+  animation: dot-two 2s step-end infinite;
+}
+
+.ellipsis span:nth-child(3) {
+  animation: dot-three 2s step-end infinite;
+}
+
+@keyframes dot-one {
+  0%,
+  24% {
+    opacity: 0;
+  }
+
+  25%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes dot-two {
+  0%,
+  49% {
+    opacity: 0;
+  }
+
+  50%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes dot-three {
+  0%,
+  74% {
+    opacity: 0;
+  }
+
+  75%,
+  100% {
+    opacity: 1;
+  }
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(18px, 3vw, 28px);
+  max-width: 420px;
+  margin: clamp(32px, 5vw, 52px) auto 0;
+}
+
+.step-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(28px, 4vw, 40px) clamp(24px, 4vw, 36px);
+  border-radius: 28px;
+  background: var(--yomm-blue);
+  color: #fff;
+}
+
+.step-card-secondary {
+  background: rgba(128, 128, 128, 0.15);
+  color: #17293c;
+}
+
+.step-card-secondary .step-number {
+  background: rgba(128, 128, 128, 0.18);
+  color: #536579;
+}
+
+.step-or {
+  margin: -8px 0;
+  color: #17293c;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-bottom: 16px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.step-card h2 {
+  margin: 0 0 18px;
+  font-size: clamp(1.3rem, 2.4vw, 1.6rem);
+  font-weight: 750;
+  letter-spacing: -0.025em;
+  line-height: 1.18;
+}
+
+.step-detail {
+  margin: 0 0 20px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.4;
+  opacity: 0.85;
+  text-align: center;
+}
+
+.qr-code {
+  width: min(100%, 200px);
+  padding: 14px;
+  border-radius: 20px;
+  background: #fff;
+}
+
+.qr-code svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.app-store-button {
+  display: inline-block;
+  border-radius: 9px;
+  line-height: 0;
+}
+
+.app-store-button img {
+  display: block;
+  width: 200px;
+  max-width: 100%;
+  height: auto;
+}
+
+.app-store-button:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 4px;
+}
+
+.encouragement {
+  width: min(78vw, 390px);
+  margin: clamp(42px, 6vw, 68px) auto 0;
+}
+
+.encouragement img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.encouragement figcaption {
+  margin-top: 8px;
+  color: #17293c;
+  font-size: 1.05rem;
+  font-weight: 750;
+}
+
+.invalid-state {
+  display: grid;
+  min-height: calc(100vh - clamp(64px, 12vw, 168px));
+  min-height: calc(100dvh - clamp(64px, 12vw, 168px));
+  align-content: center;
+  justify-items: center;
+  text-align: center;
+}
+
+.invalid-state[hidden] {
+  display: none;
+}
+
+.invalid-state img {
+  display: block;
+  width: min(100%, 480px);
+  height: auto;
+  margin-bottom: 28px;
+}
+
+.invalid-state h1 {
+  max-width: 760px;
+  font-size: clamp(2.2rem, 6vw, 4.5rem);
+}
+
+.invalid-state p {
+  margin: 18px 0 0;
+  color: #536579;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  line-height: 1.45;
+}
+
+@media (max-width: 760px) {
+  main {
+    padding: 30px 14px 52px;
+  }
+
+  h1 {
+    font-size: clamp(2.35rem, 12vw, 3.6rem);
+  }
+
+  .encouragement {
+    width: min(92vw, 360px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ellipsis span {
+    animation: none;
+  }
+}

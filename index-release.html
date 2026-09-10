@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#FDF9F1">
+  <title>Yomm — You On My Mind</title>
+  <meta name="description" content="You On My Mind">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <main>
+    <p aria-label="We’re thinking of you...">
+      We’re thinking of you<span class="ellipsis" aria-hidden="true"><span>.</span><span>.</span><span>.</span></span>
+    </p>
+    <!-- Rotating value proposition, parked for now. Restore this <p>, the
+         intro.js script tag below, and the .value-proposition rules in
+         styles.css to bring it back.
+    <p class="value-proposition" id="value-proposition">Let someone know
+you’re thinking
+about them</p>
+    -->
+    <div class="hero-stage">
+      <button class="hero-illustration" type="button" data-pose="thoughtful" aria-pressed="false" aria-label="Show yommguy looking at his phone">
+        <img class="hero-frame hero-frame-thoughtful" src="assets/animation-1-think.png" alt="Yommguy and graytabby">
+        <img class="hero-frame hero-frame-phone" src="assets/animation-2-hold.png" alt="" aria-hidden="true">
+        <img class="hero-frame hero-frame-kneel" src="assets/animation-3-kneel.png" alt="" aria-hidden="true">
+        <img class="hero-frame hero-frame-comfort" src="assets/animation-4-sit.png" alt="" aria-hidden="true">
+      </button>
+      <a class="welcome-cta" href="https://apps.apple.com/" rel="noopener" aria-hidden="true" tabindex="-1">Come on in — we’ll explain</a>
+    </div>
+    <p class="intro-tagline">A deceptively simple app to let someone know you’re thinking about them.</p>
+    <a class="app-store-button" href="https://apps.apple.com/" rel="noopener">
+      <img src="assets/app-store.png" alt="Download on the App Store">
+    </a>
+    <nav aria-label="Yomm links">
+      <a href="/privacy/">Privacy</a>
+      <a href="/support/">Support</a>
+    </nav>
+  </main>
+  <!-- <script src="intro.js" defer></script> -->
+  <script src="hero-illustration.js" defer></script>
+</body>
+
+</html>

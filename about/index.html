@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#FDF9F1">
+  <title>About — Yomm</title>
+  <meta name="description" content="Who made Yomm, and how it came to be.">
+  <link rel="stylesheet" href="/privacy/privacy.css">
+  <style>
+    /* This art is square; show it in the same 16:9 header box as the other pages. */
+    header img {
+      aspect-ratio: 1672 / 941;
+      object-fit: contain;
+    }
+
+    /* The same space above and below the counter's cloud at the end of the
+       page. */
+    main {
+      --counter-space: 120px;
+      padding-bottom: max(var(--counter-space), env(safe-area-inset-bottom));
+    }
+
+    h2 {
+      margin-bottom: 28px;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* The story comes first, so it starts right under the header art. */
+    section {
+      margin-top: 0;
+    }
+
+    /* A short centered rule between the story and the credits. */
+    .separator {
+      width: 48px;
+      height: 0;
+      margin: 56px auto;
+      border: 0;
+      border-top: 2px solid var(--yomm-silver);
+      border-radius: 1px;
+    }
+
+    .credits {
+      text-align: center;
+    }
+
+    /* The story's thought cloud around the counter: the same geometry and
+       motion as storyboard.css (1× units, --u), with the counter where the
+       wordmark sits. It forms when it scrolls into view, then each circle
+       drifts and breathes on its own. */
+    .counter-cloud {
+      /* Narrow screens leave room for the circles' drift beyond the box. */
+      --u: min(1px, (100vw - 60px) / 346);
+      --drift-x: 12;
+      --drift-y: 10;
+      --puff-breath: 0.03;
+      --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: calc(346 * var(--u));
+      height: calc(288 * var(--u));
+      margin: var(--counter-space) auto 0;
+    }
+
+    /* A fixed center fill keeps the middle white however the circles move. */
+    .counter-cloud::before {
+      content: "";
+      position: absolute;
+      top: calc((144 - 98) * var(--u));
+      left: calc((173 - 98) * var(--u));
+      width: calc(196 * var(--u));
+      height: calc(196 * var(--u));
+      border-radius: 50%;
+      background: #fff;
+      transition: transform 800ms var(--ease-pop) 150ms;
+    }
+
+    .counter-cloud .puff {
+      position: absolute;
+      top: calc((var(--y) - 75) * var(--u));
+      left: calc((var(--x) - 75) * var(--u));
+      width: calc(150 * var(--u));
+      height: calc(150 * var(--u));
+      transition: transform 800ms var(--ease-pop) calc(var(--i) * 110ms);
+    }
+
+    .counter-cloud .puff::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: #fff;
+      animation:
+        drift-x calc(3.2s + var(--i) * 0.4s) ease-in-out calc(var(--i) * -1.3s) infinite alternate,
+        drift-y calc(4.1s + var(--i) * 0.35s) ease-in-out calc(var(--i) * -1.9s) infinite alternate,
+        puff-breathe calc(2.8s + var(--i) * 0.3s) ease-in-out calc(var(--i) * -0.9s) infinite alternate;
+    }
+
+    /* Before it comes into view, the cloud and its counter wait unformed. */
+    .counter-cloud[data-cloud="waiting"]::before,
+    .counter-cloud[data-cloud="waiting"] .puff {
+      transform: scale(0);
+    }
+
+    .counter-cloud[data-cloud="waiting"] .elapsed {
+      opacity: 0;
+    }
+
+    @keyframes drift-x {
+      from {
+        translate: calc(-1 * var(--drift-x) * var(--u)) 0;
+      }
+
+      to {
+        translate: calc(var(--drift-x) * var(--u)) 0;
+      }
+    }
+
+    @keyframes drift-y {
+      from {
+        transform: translateY(calc(-1 * var(--drift-y) * var(--u)));
+      }
+
+      to {
+        transform: translateY(calc(var(--drift-y) * var(--u)));
+      }
+    }
+
+    @keyframes puff-breathe {
+      from {
+        scale: calc(1 - var(--puff-breath));
+      }
+
+      to {
+        scale: calc(1 + var(--puff-breath));
+      }
+    }
+
+    /* The seconds this page has been open: heavy, rounded digits in the body
+       text color, fading in at the cloud's center as it forms. */
+    .elapsed {
+      position: relative;
+      margin: 0;
+      color: var(--yomm-charcoal);
+      font-family: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+      font-size: calc(72 * var(--u));
+      font-variant-numeric: tabular-nums;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      text-align: center;
+      transition: opacity 700ms ease 450ms;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .counter-cloud *,
+      .counter-cloud::before,
+      .counter-cloud *::before {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="home-nav" aria-label="Page navigation">
+    <a class="home-link" href="/" aria-label="Back to Yomm home">←</a>
+  </nav>
+
+  <header>
+    <img src="/assets/illu-you-got-this.png" width="1254" height="1254"
+      alt="Yommguy giving a thumbs up next to graytabby">
+  </header>
+
+  <main>
+    <h1 class="visually-hidden">About Yomm</h1>
+
+    <section>
+      <h2>This idea wanted to exist.</h2>
+
+      <p>Our first attempt to bring it to life was in 2015, when we built a first version that was much bigger in scope
+        and far more ambitious. We released it, and it ran for a while, but it didn’t survive: it was full of exotic
+        bugs, and we didn’t really know what we were doing.</p>
+
+      <p>After that, the story slept for a long time. Our kids were born, and life went on. But a few years ago, Józsi
+        started thinking about how the core interaction could be made a little simpler. He made a few designs, then went
+        looking for a developer.</p>
+
+      <p>That’s more or less how it started. In the summer of 2026, Józsi got in touch with Janó. They sat down at the
+        Indian restaurant on Jókai utca in Budapest, and he asked: what if we gave Yomm one more try, as an encore?</p>
+
+      <p>By then, a working prototype was ready, but it still needed Secret Yomms and so many little things.</p>
+
+      <p>We hope it will be a useful app for you too. It has already gotten us out of a tight spot once or twice.</p>
+
+      <p>There’s something to it: often, just thinking of someone is enough.</p>
+    </section>
+
+    <hr class="separator">
+
+    <p class="credits">Created by <a target="_blank" href="https://jozsefschaffer.com" rel="noopener">József
+        Schaffer</a><br>
+      Original idea by <a target="_blank" href="https://www.linkedin.com/in/janosdebreceni/" rel="noopener">János
+        Debreceni</a><br>
+      Original proofreading by <a target="_blank" href="https://www.linkedin.com/in/jaspergarland/" rel="noopener">Jasper
+        Garland</a></p>
+
+    <div class="counter-cloud" aria-hidden="true" data-cloud="formed">
+      <span class="puff" style="--x: 74; --y: 163; --i: 0"></span>
+      <span class="puff" style="--x: 116; --y: 97; --i: 1"></span>
+      <span class="puff" style="--x: 198; --y: 75; --i: 2"></span>
+      <span class="puff" style="--x: 272; --y: 131; --i: 3"></span>
+      <span class="puff" style="--x: 246; --y: 196; --i: 4"></span>
+      <span class="puff" style="--x: 148; --y: 214; --i: 5"></span>
+      <p class="elapsed" data-elapsed>1</p>
+    </div>
+  </main>
+
+  <script>
+    // Counts the seconds this page has been open, starting at 1 like a live
+    // count. The value comes from elapsed time, so it stays right even when
+    // the tab was in the background.
+    (function countElapsedSeconds() {
+      const counter = document.querySelector("[data-elapsed]");
+      if (!counter) {
+        return;
+      }
+      const openedAt = performance.now();
+      let shown = 1;
+      window.setInterval(function render() {
+        const seconds = Math.floor((performance.now() - openedAt) / 1000) + 1;
+        if (seconds !== shown) {
+          shown = seconds;
+          counter.textContent = String(seconds);
+        }
+      }, 250);
+    })();
+
+    // The cloud is formed by default. Where it can animate, it waits unformed
+    // and builds up once it scrolls into view.
+    (function formCloudInView() {
+      const cloud = document.querySelector("[data-cloud]");
+      if (
+        !cloud ||
+        !("IntersectionObserver" in window) ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ) {
+        return;
+      }
+      cloud.dataset.cloud = "waiting";
+      const observer = new IntersectionObserver(function formWhenVisible(entries) {
+        if (entries.some(function isVisible(entry) { return entry.isIntersecting; })) {
+          cloud.dataset.cloud = "formed";
+          observer.disconnect();
+        }
+      }, { threshold: 0.6 });
+      observer.observe(cloud);
+    })();
+  </script>
+</body>
+
+</html>

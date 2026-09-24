@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#FDF9F1">
+  <title>Yomm</title>
+  <style>:root { --yomm-porcelain: #FDF9F1; } html, body { background: var(--yomm-porcelain); }</style>
+</head>
+
+<body>
+  <script>
+    const match = window.location.pathname.match(/^\/connect\/([^/]+)\/?$/);
+
+    if (match) {
+      const params = new URLSearchParams(window.location.search);
+      params.set("code", match[1]);
+      window.location.replace(`/connect/?${params.toString()}`);
+    } else {
+      window.location.replace("/");
+    }
+  </script>
+  <noscript>
+    <p><a href="/">Go to Yomm</a></p>
+  </noscript>
+</body>
+
+</html>

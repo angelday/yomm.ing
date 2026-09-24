@@ -1,0 +1,950 @@
+/*
+ * You On My Mind storyboard (index-anim.html). Desktop layout.
+ *
+ * One design unit, --u, is one Figma pixel at 1×. Every size, offset, and
+ * anchor below is its 1× value times --u, so the whole story scales as one.
+ * storyboard.js only sets data attributes on .stage; this file decides how
+ * each state looks and moves. Beat timing lives in storyboard.js; motion
+ * durations live in the tokens below.
+ */
+
+@property --u {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 1px;
+}
+
+:root {
+  color-scheme: light;
+  --yomm-charcoal: #34353B;
+  --yomm-ember: #FD681A;
+  --yomm-ember-shadow: color-mix(in srgb, var(--yomm-ember) 72%, var(--yomm-charcoal));
+  --yomm-ember-focus: color-mix(in srgb, var(--yomm-ember) 36%, transparent);
+  --yomm-porcelain: #FDF9F1;
+  --font-rounded: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+
+  --token-step: 40ms;
+  --dot-step: 1s;
+  --token-fade: 280ms;
+  --copy-out: 300ms;
+  --slide: 1100ms;
+  --iris: 950ms;
+  --arrive: 700ms;
+  --hand-move: 900ms;
+  --drift-x: 12;
+  --drift-y: 10;
+  --puff-breath: 0.03;
+  --ease-out: cubic-bezier(0.22, 0.8, 0.25, 1);
+  --ease-in: cubic-bezier(0.55, 0, 0.75, 0.2);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  background: var(--yomm-porcelain);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  background: var(--yomm-porcelain);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Stage: fits the 1100 × 500 slot group, the copy above and the final line
+   below (about 800 tall), plus room for the toast to overhang her slot. The
+   band at the bottom holds Skip during the story and the download section at
+   the end, so neither ever covers the final line. */
+.stage {
+  --gutter: 32px;
+  --footer-space: 72px;
+  --u: min(1px, (100vw - 2 * var(--gutter)) / 1400, (100dvh - var(--gutter) - var(--footer-space)) / 800);
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: var(--gutter) var(--gutter) var(--footer-space);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Skip cuts straight to the last frame: no transition may play on the way. */
+.stage.is-cutting,
+.stage.is-cutting *,
+.stage.is-cutting *::before {
+  transition: none !important;
+}
+
+/* Art is never a drag or selection target; text stays selectable. */
+.stage img {
+  pointer-events: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Site chrome: ordinary fixed-size UI, not art, so it does not scale with
+   --u. During the story only Skip shows, in the bottom-left corner. When the
+   story is over (or skipped), the download section fades in as one row,
+   centered at the bottom. */
+body {
+  position: relative;
+}
+
+/* A smaller version of the Support page's orange Contact button (about half
+   its size), with the same raised edge that presses down. It sits the page
+   gutter (32 px) from the left and from the bottom, measured to the bottom of
+   its raised edge. */
+.skip-link {
+  position: absolute;
+  bottom: calc(32px + 5px);
+  left: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--yomm-ember);
+  box-shadow: 0 5px 0 var(--yomm-ember-shadow);
+  color: var(--yomm-porcelain);
+  font-family: var(--font-rounded);
+  font-size: 15px;
+  font-weight: 750;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    opacity 400ms ease,
+    visibility 0s linear 400ms;
+}
+
+.skip-link:hover {
+  transform: translateY(1px);
+  box-shadow: 0 4px 0 var(--yomm-ember-shadow);
+}
+
+.skip-link:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--yomm-ember-shadow);
+}
+
+.skip-link:focus-visible {
+  outline: 3px solid var(--yomm-ember-focus);
+  outline-offset: 4px;
+}
+
+.stage[data-links="on"] ~ .skip-link {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* The App Store button with the three links beneath it, centered. */
+.site-footer {
+  position: absolute;
+  right: 0;
+  bottom: 32px;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 900ms ease,
+    visibility 0s linear 900ms;
+}
+
+.stage[data-links="on"] ~ .site-footer {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 900ms ease;
+}
+
+.app-store-button {
+  display: block;
+  border-radius: 9px;
+  line-height: 0;
+}
+
+.app-store-button img {
+  display: block;
+  width: 165px;
+  height: auto;
+}
+
+.site-footer nav {
+  display: flex;
+  gap: 14px;
+  font-family: var(--font-rounded);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.site-footer nav a {
+  border-radius: 6px;
+  color: var(--yomm-charcoal);
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.site-footer nav a:hover {
+  color: var(--yomm-ember);
+}
+
+.app-store-button:focus-visible,
+.site-footer nav a:focus-visible {
+  outline: 3px solid var(--yomm-ember-focus);
+  outline-offset: 4px;
+}
+
+/* Scene: two fixed 500 slots 100 apart. The copy row above and the line row
+   below are equal, so the people stay at the stage's vertical center. */
+.scene {
+  display: grid;
+  grid-template-columns: calc(500 * var(--u)) calc(100 * var(--u)) calc(500 * var(--u));
+  grid-template-rows: calc(141 * var(--u)) calc(500 * var(--u)) calc(141 * var(--u));
+  grid-template-areas:
+    "top top top"
+    "guy . girl"
+    "bottom bottom bottom";
+}
+
+/* Text: SF Pro Rounded, as on the current landing page. */
+
+.copy {
+  display: grid;
+  grid-area: top;
+  align-content: start;
+  justify-items: center;
+}
+
+.copy-line,
+.final-line {
+  margin: 0;
+  color: var(--yomm-charcoal);
+  font-family: var(--font-rounded);
+  font-size: calc(32 * var(--u));
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: calc(43 * var(--u));
+  text-align: center;
+}
+
+/* Outgoing copy fades as a whole; hidden copy is not selectable. */
+.copy-line {
+  grid-area: 1 / 1;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--copy-out) ease,
+    visibility 0s linear var(--copy-out);
+}
+
+.copy-line.is-active {
+  opacity: 1;
+  visibility: visible;
+  transition: none;
+}
+
+/* Incoming text streams in: pieces longer than a letter, shorter than most
+   words. It waits for the outgoing copy to fade first. */
+.token {
+  animation: token-in var(--token-fade) ease-out both;
+  animation-delay: calc(var(--t) * var(--token-step));
+}
+
+.is-following .token {
+  animation-delay: calc(var(--copy-out) + var(--t) * var(--token-step));
+}
+
+@keyframes token-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Between the two of them, just below their feet: the empty lower part of
+   the slot row, clear of both figures. That leaves the bottom of the stage to
+   the download section. */
+.final-line {
+  grid-row: 2;
+  grid-column: 1 / -1;
+  align-self: end;
+  justify-self: center;
+  margin-bottom: calc(-6 * var(--u));
+  opacity: 0;
+}
+
+[data-line="on"] .final-line {
+  opacity: 1;
+}
+
+/* The final line's trailing dots, as on the current landing page: none, then
+   one, two, three, a step apart, then over again. The fixed width keeps the
+   centered line from shifting as they appear. */
+.ellipsis {
+  display: inline-block;
+  width: 0.9em;
+  margin-left: 0.04em;
+  text-align: left;
+}
+
+.ellipsis span:nth-child(1) {
+  animation: dot-one calc(4 * var(--dot-step)) step-end infinite;
+}
+
+.ellipsis span:nth-child(2) {
+  animation: dot-two calc(4 * var(--dot-step)) step-end infinite;
+}
+
+.ellipsis span:nth-child(3) {
+  animation: dot-three calc(4 * var(--dot-step)) step-end infinite;
+}
+
+@keyframes dot-one {
+  0%,
+  24% {
+    opacity: 0;
+  }
+
+  25%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes dot-two {
+  0%,
+  49% {
+    opacity: 0;
+  }
+
+  50%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes dot-three {
+  0%,
+  74% {
+    opacity: 0;
+  }
+
+  75%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Slots: each person's outside figure and point of view share one cell. */
+
+.slot {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.slot > .figure,
+.slot > .pov {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+}
+
+.slot-guy {
+  grid-area: guy;
+  /* Alone, he sits at the group's center: half the distance between slot
+     centers. The offset goes to zero when her slot opens. */
+  translate: calc(300 * var(--u)) 0;
+  transition: translate var(--slide) var(--ease-in-out);
+}
+
+[data-split="on"] .slot-guy {
+  translate: 0 0;
+}
+
+/* She fades in as a whole while he slides over, already turned to her
+   buzzing phone. */
+.slot-girl {
+  grid-area: girl;
+  opacity: 0;
+  transition: opacity var(--arrive) ease 450ms;
+}
+
+[data-split="on"] .slot-girl {
+  opacity: 1;
+}
+
+.figure {
+  display: grid;
+  place-items: center;
+}
+
+.figure > .art {
+  grid-area: 1 / 1;
+}
+
+.art,
+.hand {
+  display: block;
+  width: calc(var(--w) * var(--u));
+  max-width: none;
+  height: auto;
+}
+
+/* Pose and frame changes are cuts, like animation frames: a crossfade between
+   two poses dips in opacity and reads as a pop. Only entrances and her change
+   of view fade. */
+.art {
+  opacity: 0;
+}
+
+.pose-think,
+.pose-hold,
+.pose-kneel,
+.pose-sit {
+  --w: 250;
+}
+
+.pose-end,
+.pose-end-smile,
+.pose-read,
+.pose-reach,
+.pose-girl-end,
+.blink {
+  --w: 280;
+}
+
+/* Outside poses */
+
+[data-guy="think"] .pose-think,
+[data-guy="hold"] .pose-hold,
+[data-guy="kneel"] .pose-kneel,
+[data-guy="sit"] .pose-sit,
+[data-guy="end"] .pose-end,
+[data-guy="smile"] .pose-end-smile,
+[data-girl="read"] .pose-read,
+[data-girl="reach"] .pose-reach,
+[data-girl="smile"] .pose-girl-end {
+  opacity: 1;
+}
+
+[data-guy="think"] .pose-think {
+  transition: opacity 900ms ease;
+}
+
+/* The opening circle covers a figure before it is hidden underneath. */
+[data-guy="pov"] .slot-guy .figure > .art,
+[data-girl="pov"] .slot-girl .figure > .art {
+  transition: opacity 0s linear var(--iris);
+}
+
+/* Her phone buzzes: only the overlay's opacity changes. */
+[data-blink="on"] .blink {
+  animation: buzz 720ms steps(1, end) infinite;
+}
+
+@keyframes buzz {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Points of view: his circle opens out of the phone in his hands and closes
+   back into it; hers, being her point of view, opens from and closes to the
+   center. --open-x/y is where the circle grows from in the current pose. */
+
+.pov {
+  position: relative;
+  background: #fff;
+  clip-path: circle(0% at var(--open-x) var(--open-y));
+  transition: clip-path var(--iris) var(--ease-in-out);
+}
+
+.pov > * {
+  position: absolute;
+}
+
+.pov-guy {
+  --open-x: 44.3%;
+  --open-y: 60%;
+}
+
+[data-guy="end"] .pov-guy,
+[data-guy="smile"] .pov-guy {
+  --open-x: 43.5%;
+  --open-y: 51%;
+}
+
+.pov-girl {
+  --open-x: 50%;
+  --open-y: 50%;
+}
+
+[data-guy="pov"] .pov-guy,
+[data-girl="pov"] .pov-girl {
+  clip-path: circle(50% at 50% 50%);
+}
+
+.base {
+  --w: 502.67;
+  top: 0;
+  left: calc(-2.7 * var(--u));
+}
+
+[data-guy-base="avatars"] .base-avatars,
+[data-guy-base="zooming"] .base-zooming,
+[data-guy-base="session"] .base-session {
+  opacity: 1;
+}
+
+.base-girl {
+  --w: 500;
+  top: 0;
+  left: 0;
+  opacity: 1;
+}
+
+/* Hands. Anchors are each image's top-left inside the 500 circle, matched
+   against the storyboard frames; motion is a transform from the wrist, and a
+   change of hand shape is a cut. */
+
+.hand {
+  top: calc(var(--y) * var(--u));
+  left: calc(var(--x) * var(--u));
+  transform-origin: 80% 100%;
+  transition: transform var(--hand-move) var(--ease-out);
+}
+
+.hand-guy-point {
+  --x: 205.9;
+  --y: 116.3;
+  --w: 279.67;
+  transform: translate(calc(240 * var(--u)), calc(360 * var(--u))) rotate(8deg);
+}
+
+.hand-guy-tap {
+  --x: 180.5;
+  --y: 116.3;
+  --w: 349;
+  opacity: 0;
+}
+
+[data-guy-hand="point"] .hand-guy-point {
+  transform: none;
+}
+
+[data-guy-hand="tap"] .hand-guy-point {
+  transform: none;
+  opacity: 0;
+}
+
+[data-guy-hand="tap"] .hand-guy-tap {
+  opacity: 1;
+}
+
+[data-guy-hand="out"] .hand-guy-point {
+  transition-duration: 1100ms;
+  transition-timing-function: var(--ease-in);
+}
+
+.hand-girl-point,
+.hand-girl-fist {
+  --x: 287.4;
+  --y: 242;
+  /* Her reach stops about halfway along its visible path, between the circle's
+     edge and the storyboard pose: a hesitant gesture toward his avatar, not a
+     literal tap. */
+  --halfway: translate(calc(35 * var(--u)), calc(47 * var(--u))) rotate(2deg);
+}
+
+.hand-girl-point {
+  --w: 235;
+  transform: translate(calc(200 * var(--u)), calc(260 * var(--u))) rotate(8deg);
+}
+
+/* The fist waits where the reach stops, so the cut from point to fist does
+   not jump. */
+.hand-girl-fist {
+  --w: 236;
+  opacity: 0;
+  transform: var(--halfway);
+}
+
+[data-girl-hand="point"] .hand-girl-point {
+  transform: var(--halfway);
+}
+
+/* She reaches, thinks, then closes her hand and draws it back. */
+[data-girl-hand="fist"] .hand-girl-point {
+  transform: var(--halfway);
+  opacity: 0;
+}
+
+[data-girl-hand="fist"] .hand-girl-fist {
+  opacity: 1;
+  transform: translate(calc(57 * var(--u)), calc(77 * var(--u))) rotate(2deg);
+  transition-duration: 1400ms;
+}
+
+/* Live count: white, heavy, rounded digits with a dark outline. */
+.counter {
+  --ink: var(--yomm-charcoal);
+  --o: calc(2.4 * var(--u));
+  --d: calc(1.7 * var(--u));
+  top: calc(var(--cy) * var(--u));
+  left: calc(var(--cx) * var(--u));
+  translate: -50% -50%;
+  color: #fff;
+  font-family: var(--font-rounded);
+  font-size: calc(44 * var(--u));
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-shadow:
+    var(--o) 0 0 var(--ink),
+    calc(-1 * var(--o)) 0 0 var(--ink),
+    0 var(--o) 0 var(--ink),
+    0 calc(-1 * var(--o)) 0 var(--ink),
+    var(--d) var(--d) 0 var(--ink),
+    calc(-1 * var(--d)) var(--d) 0 var(--ink),
+    var(--d) calc(-1 * var(--d)) 0 var(--ink),
+    calc(-1 * var(--d)) calc(-1 * var(--d)) 0 var(--ink),
+    0 calc(3 * var(--u)) calc(6 * var(--u)) rgb(0 0 0 / 0.25);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 250ms ease;
+}
+
+.counter-guy {
+  --cx: 232;
+  --cy: 107.6;
+}
+
+.counter-girl {
+  --cx: 242.6;
+  --cy: 199.2;
+}
+
+[data-counter="on"] .counter {
+  opacity: 1;
+}
+
+/* Summary toast: an illustration of the app's black summary bar. */
+.toast {
+  position: absolute;
+  top: calc(156 * var(--u));
+  left: calc(372 * var(--u));
+  margin: 0;
+  padding: calc(14 * var(--u)) calc(24 * var(--u));
+  border-radius: calc(10 * var(--u));
+  background: #000;
+  color: #fff;
+  font-family: var(--font-rounded);
+  font-size: calc(17 * var(--u));
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  text-align: center;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  translate: 0 calc(18 * var(--u));
+  transition:
+    opacity 450ms ease,
+    translate 550ms var(--ease-out),
+    visibility 0s linear 550ms;
+}
+
+[data-toast="on"] .toast {
+  opacity: 1;
+  visibility: visible;
+  translate: 0 0;
+  transition:
+    opacity 450ms ease,
+    translate 550ms var(--ease-out);
+}
+
+/* Thought cloud: six equal circles form around the wordmark, then each one
+   drifts and breathes on its own, so the outline keeps shifting while the
+   lettering stays perfectly still. A fixed center fill keeps the middle white
+   however far the circles wander; at these amplitudes it never reaches the
+   outline and the lettering never leaves the white. */
+.cloud {
+  position: relative;
+  z-index: 1;
+  grid-area: top;
+  align-self: start;
+  justify-self: center;
+  width: calc(346 * var(--u));
+  height: calc(288 * var(--u));
+  pointer-events: none;
+}
+
+.cloud::before {
+  content: "";
+  position: absolute;
+  top: calc((144 - 98) * var(--u));
+  left: calc((173 - 98) * var(--u));
+  width: calc(196 * var(--u));
+  height: calc(196 * var(--u));
+  border-radius: 50%;
+  background: #fff;
+  transform: scale(0);
+  transition: transform 800ms var(--ease-pop) 150ms;
+}
+
+[data-cloud="on"] .cloud::before {
+  transform: scale(1);
+}
+
+.puff {
+  position: absolute;
+  top: calc((var(--y) - 75) * var(--u));
+  left: calc((var(--x) - 75) * var(--u));
+  width: calc(150 * var(--u));
+  height: calc(150 * var(--u));
+  transform: scale(0);
+  transition: transform 800ms var(--ease-pop) calc(var(--i) * 110ms);
+}
+
+.puff::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #fff;
+}
+
+[data-cloud="on"] .puff {
+  transform: scale(1);
+}
+
+/* Horizontal drift, vertical drift, and breathing run at different periods
+   and phases, so each circle wanders its own path instead of repeating a
+   loop. */
+[data-cloud="on"] .puff::before {
+  animation:
+    drift-x calc(3.2s + var(--i) * 0.4s) ease-in-out calc(var(--i) * -1.3s) infinite alternate,
+    drift-y calc(4.1s + var(--i) * 0.35s) ease-in-out calc(var(--i) * -1.9s) infinite alternate,
+    puff-breathe calc(2.8s + var(--i) * 0.3s) ease-in-out calc(var(--i) * -0.9s) infinite alternate;
+}
+
+@keyframes puff-breathe {
+  from {
+    scale: calc(1 - var(--puff-breath));
+  }
+
+  to {
+    scale: calc(1 + var(--puff-breath));
+  }
+}
+
+@keyframes drift-x {
+  from {
+    translate: calc(-1 * var(--drift-x) * var(--u)) 0;
+  }
+
+  to {
+    translate: calc(var(--drift-x) * var(--u)) 0;
+  }
+}
+
+@keyframes drift-y {
+  from {
+    transform: translateY(calc(-1 * var(--drift-y) * var(--u)));
+  }
+
+  to {
+    transform: translateY(calc(var(--drift-y) * var(--u)));
+  }
+}
+
+.wordmark {
+  position: absolute;
+  top: calc(54 * var(--u));
+  left: calc(61 * var(--u));
+  width: calc(211.33 * var(--u));
+  height: auto;
+  opacity: 0;
+  transition: opacity 700ms ease 450ms;
+}
+
+[data-cloud="on"] .wordmark {
+  opacity: 1;
+}
+
+/*
+ * Portrait (phones, and any taller-than-wide window): the same slots,
+ * stacked, him above her. Alone, he fills the width; when she arrives the
+ * view pulls back (--u itself animates) until both circles fit. The copy sits
+ * above him while he is alone and between the two phones once she is there;
+ * the toast and then the cloud use that same space between them, so the
+ * thought ends up between the two people. The final line sits under her.
+ * Text and site links use fixed, readable sizes here instead of --u. The
+ * controller is unchanged: it never knows which layout is showing.
+ */
+@media (orientation: portrait) {
+  .stage {
+    --gutter: 16px;
+    /* The pinned site links, plus room for the final line, which hangs a
+       little below her slot. */
+    --footer-space: calc(72px + 24px + env(safe-area-inset-bottom));
+    /* Room for three lines of copy above his solo circle, mirrored below
+       it because the circle stays centered. */
+    --solo-copy-space: 188px;
+    --room: calc(100dvh - var(--gutter) - var(--footer-space));
+    --u-solo: min(1px, (100vw - 2 * var(--gutter)) / 500, (var(--room) - var(--solo-copy-space)) / 500);
+    --u-split: min(1px, (100vw - 2 * var(--gutter)) / 500, var(--room) / 1140);
+    --u: var(--u-solo);
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    padding: var(--gutter) var(--gutter) var(--footer-space);
+    place-content: center;
+    /* Alone, the unused half of the scene overflows; it is empty, so clip it
+       rather than let the page scroll. */
+    overflow: clip;
+    transition: --u var(--slide) var(--ease-in-out);
+  }
+
+  .stage[data-split="on"] {
+    --u: var(--u-split);
+  }
+
+  /* His slot, the space between them, her slot. */
+  .scene {
+    grid-template-columns: calc(500 * var(--u));
+    grid-template-rows: calc(500 * var(--u)) calc(140 * var(--u)) calc(500 * var(--u));
+    grid-template-areas:
+      "guy"
+      "between"
+      "girl";
+  }
+
+  /* Alone, he sits at the group's center, half the distance between slot
+     centers below his split position; the slide goes up instead of left. */
+  .slot-guy {
+    translate: 0 calc(320 * var(--u));
+  }
+
+  .copy {
+    grid-area: between;
+    align-self: center;
+    justify-self: center;
+    /* Alone, the copy hugs the top of his circle: from the middle of the
+       space between the slots (570) up to his solo circle's top (320). Once
+       she is there, it sits between the two phones. It is empty whenever it
+       moves. */
+    translate: 0 calc(-250 * var(--u) - 50% - 16px);
+  }
+
+  [data-split="on"] .copy {
+    translate: 0 0;
+  }
+
+  .copy-line {
+    align-self: end;
+  }
+
+  [data-split="on"] .copy-line {
+    align-self: center;
+  }
+
+  .copy-line,
+  .final-line {
+    font-size: 20px;
+    line-height: 26px;
+    white-space: nowrap;
+  }
+
+  /* Under her, in the empty lower part of her slot. */
+  .final-line {
+    grid-area: girl;
+    align-self: start;
+    margin-top: calc(405 * var(--u) + 6px);
+    margin-bottom: 0;
+  }
+
+  /* Between his open phone and her head: the middle of the space from his
+     circle's bottom (500) to her figure's top (735), 22.5 above her slot. */
+  .toast {
+    top: calc(-22.5 * var(--u));
+    left: 50%;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    translate: -50% calc(-50% + 12px);
+  }
+
+  [data-toast="on"] .toast {
+    translate: -50% -50%;
+  }
+
+  /* Between them: it clears his figure by about 37 and hers by about 26 at
+     1×, more than the circles' drift. */
+  .cloud {
+    grid-area: between;
+    align-self: center;
+  }
+
+  /* Skip and, at the end, the download row sit in the reserved band. Skip is
+     the phone gutter (16 px) from the left and from the bottom of its edge. */
+  .skip-link {
+    bottom: calc(16px + 5px + env(safe-area-inset-bottom));
+    left: 16px;
+  }
+
+  /* Height is scarce here, so the button and links stay one row. */
+  .site-footer {
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  .app-store-button img {
+    width: 120px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage,
+  .stage *,
+  .stage *::before,
+  .skip-link,
+  .site-footer {
+    transition: none !important;
+    animation: none !important;
+  }
+}

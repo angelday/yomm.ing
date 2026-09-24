@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#FDF9F1">
+  <meta name="robots" content="noindex">
+  <title>Yomm — You On My Mind</title>
+  <meta name="description" content="You On My Mind">
+  <link rel="preload" as="image" href="assets/storyboard/yommguy-think.png" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/storyboard/yommguy-hold.png">
+  <link rel="preload" as="image" href="assets/storyboard/yommguy-kneel.png">
+  <link rel="preload" as="image" href="assets/storyboard/yommguy-sit.png">
+  <link rel="stylesheet" href="storyboard.css">
+  <script src="storyboard.js" defer></script>
+  <noscript>
+    <style>
+      .slot-guy { translate: 0 0; }
+      .slot-girl { opacity: 1; }
+      .site-footer { opacity: 1; visibility: visible; }
+      .skip-link { display: none; }
+      .pose-end-smile, .pose-girl-end, .final-line { opacity: 1; }
+      .puff, .wordmark, .cloud::before { opacity: 1; transform: none; }
+      @media (orientation: portrait) { .stage { --u: var(--u-split); } }
+    </style>
+  </noscript>
+</head>
+
+<body>
+  <!-- One stage, driven by data attributes: storyboard.js decides when each
+       beat happens, storyboard.css decides how every state looks and moves.
+       Its archived plan is archive/STORYBOARD_IMPLEMENTATION_PLAN.md. -->
+  <main class="stage" id="storyboard" aria-labelledby="storyboard-title"
+    data-guy="none" data-guy-base="avatars" data-guy-hand="out"
+    data-girl="off" data-girl-hand="out" data-blink="off" data-split="off"
+    data-counter="off" data-toast="off" data-cloud="off" data-line="off" data-links="off">
+    <h1 class="visually-hidden" id="storyboard-title">You On My Mind</h1>
+    <p class="visually-hidden">An illustrated story about letting someone know you’re thinking about them.</p>
+    <p class="visually-hidden" aria-live="polite" data-live></p>
+
+    <div class="scene">
+      <div class="copy" aria-hidden="true">
+        <p class="copy-line" data-copy-line></p>
+        <p class="copy-line" data-copy-line></p>
+      </div>
+
+      <div class="slot slot-guy">
+        <div class="figure">
+          <img class="art pose-think" src="assets/storyboard/yommguy-think.png" width="250" height="400" alt="" data-first>
+          <img class="art pose-hold" src="assets/storyboard/yommguy-hold.png" width="250" height="400" alt="" data-first>
+          <img class="art pose-kneel" src="assets/storyboard/yommguy-kneel.png" width="250" height="400" alt="" data-first>
+          <img class="art pose-sit" src="assets/storyboard/yommguy-sit.png" width="250" height="400" alt="" data-first>
+          <img class="art pose-end" src="assets/storyboard/yommguy-end.png" width="280" height="310" alt="">
+          <img class="art pose-end-smile" src="assets/storyboard/yommguy-end-smile.png" width="280" height="310" alt="">
+        </div>
+        <div class="pov pov-guy">
+          <img class="art base base-avatars" src="assets/storyboard/yommguy-pov-avatars.png" width="503" height="519" alt="">
+          <img class="art base base-zooming" src="assets/storyboard/yommguy-pov-zooming.png" width="503" height="519" alt="">
+          <img class="art base base-session" src="assets/storyboard/yommguy-pov-session.png" width="503" height="519" alt="">
+          <img class="hand hand-guy-point" src="assets/storyboard/yommguy-right-arm-point.png" width="280" height="369" alt="">
+          <img class="hand hand-guy-tap" src="assets/storyboard/yommguy-right-arm-tap.png" width="349" height="369" alt="">
+          <span class="counter counter-guy" aria-hidden="true" data-counter-value>1</span>
+        </div>
+      </div>
+
+      <div class="slot slot-girl">
+        <div class="figure">
+          <img class="art pose-read" src="assets/storyboard/yommgirl-read.png" width="280" height="310" alt="">
+          <img class="art pose-reach" src="assets/storyboard/yommgirl-reach.png" width="280" height="310" alt="">
+          <img class="art pose-girl-end" src="assets/storyboard/yommgirl-end.png" width="280" height="310" alt="">
+          <img class="art blink" src="assets/storyboard/yommgirl-phone-blink.png" width="280" height="310" alt="">
+        </div>
+        <div class="pov pov-girl">
+          <img class="art base-girl" src="assets/storyboard/yommgirl-pov.png" width="500" height="500" alt="">
+          <img class="hand hand-girl-point" src="assets/storyboard/yommgirl-right-arm-point.png" width="235" height="308" alt="">
+          <img class="hand hand-girl-fist" src="assets/storyboard/yommgirl-right-arm-fist.png" width="236" height="314" alt="">
+          <span class="counter counter-girl" aria-hidden="true" data-counter-value>1</span>
+        </div>
+        <p class="toast" aria-hidden="true">You’ve been on his mind<br>for 27 seconds</p>
+      </div>
+
+      <div class="cloud" aria-hidden="true">
+        <span class="puff" style="--x: 74; --y: 163; --i: 0"></span>
+        <span class="puff" style="--x: 116; --y: 97; --i: 1"></span>
+        <span class="puff" style="--x: 198; --y: 75; --i: 2"></span>
+        <span class="puff" style="--x: 272; --y: 131; --i: 3"></span>
+        <span class="puff" style="--x: 246; --y: 196; --i: 4"></span>
+        <span class="puff" style="--x: 148; --y: 214; --i: 5"></span>
+        <img class="wordmark" src="assets/storyboard/wordmark.png" width="211" height="194" alt="">
+      </div>
+
+      <!-- Shown as-is without JavaScript; storyboard.js reveals it in pieces. -->
+      <p class="final-line" aria-hidden="true" data-final-line>Because it matters<br>sometimes...</p>
+    </div>
+  </main>
+
+  <!-- During the story only Skip shows; the download section fades in once
+       the story is over, or straight away after Skip. -->
+  <button class="skip-link" type="button" data-skip>Skip</button>
+
+  <footer class="site-footer" data-site-footer>
+    <a class="app-store-button" href="https://apps.apple.com/" rel="noopener">
+      <img src="assets/app-store.png" width="165" height="55" alt="Download on the App Store">
+    </a>
+    <nav aria-label="Yomm links">
+      <a href="/privacy/">Privacy</a>
+      <a href="/support/">Support</a>
+      <a href="/about/">About</a>
+    </nav>
+  </footer>
+</body>
+
+</html>

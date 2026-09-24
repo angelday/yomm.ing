@@ -1,0 +1,213 @@
+:root {
+  color-scheme: light;
+  --yomm-charcoal: #34353B;
+  --yomm-stone: #6B6A6A;
+  --yomm-silver: #A8A7A7;
+  --yomm-ember: #FD681A;
+  --yomm-peach: #FAD6B7;
+  --yomm-porcelain: #FDF9F1;
+  --yomm-ember-shadow: color-mix(in srgb, var(--yomm-ember) 72%, var(--yomm-charcoal));
+  --yomm-stone-wash: color-mix(in srgb, var(--yomm-stone) 24%, transparent);
+  --yomm-ember-wash: color-mix(in srgb, var(--yomm-ember) 24%, transparent);
+  --yomm-ember-focus: color-mix(in srgb, var(--yomm-ember) 36%, transparent);
+  background: var(--yomm-porcelain);
+  color: var(--yomm-charcoal);
+  font-family: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  font-synthesis: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--yomm-porcelain);
+}
+
+header,
+main,
+.home-nav {
+  width: min(100% - 40px, 720px);
+  margin-inline: auto;
+}
+
+.home-nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding-top: 22px;
+  pointer-events: none;
+}
+
+.home-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 999px;
+  background: var(--yomm-stone-wash);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  color: var(--yomm-charcoal);
+  font-family: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  font-size: 2.35rem;
+  font-weight: 750;
+  line-height: 0;
+  text-decoration: none;
+  pointer-events: auto;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.home-link:hover {
+  background: var(--yomm-ember-wash);
+  color: var(--yomm-ember);
+}
+
+.home-link:focus-visible {
+  outline: 3px solid var(--yomm-ember-focus);
+  outline-offset: 3px;
+}
+
+header {
+  padding-top: 12px;
+}
+
+header img {
+  display: block;
+  width: 75%;
+  height: auto;
+  margin-inline: auto;
+}
+
+main {
+  padding: 36px 0 max(56px, env(safe-area-inset-bottom));
+}
+
+h1 {
+  margin: 0;
+  color: var(--yomm-charcoal);
+  font-size: clamp(2.5rem, 9vw, 4.5rem);
+  letter-spacing: -0.055em;
+  line-height: 0.96;
+}
+
+.policy-date {
+  margin: 18px 0 42px;
+  color: var(--yomm-stone);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+section {
+  margin-top: 56px;
+  scroll-margin-top: 18px;
+}
+
+h2 {
+  margin: 0 0 14px;
+  color: var(--yomm-charcoal);
+  font-size: clamp(1.5rem, 4vw, 1.75rem);
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+
+p,
+li {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.65;
+}
+
+p {
+  margin: 14px 0;
+}
+
+ul {
+  margin: 14px 0 0;
+  padding-left: 1.3rem;
+}
+
+li+li {
+  margin-top: 12px;
+}
+
+strong {
+  color: var(--yomm-charcoal);
+}
+
+main a {
+  color: var(--yomm-ember);
+  font-weight: 650;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+main a:not(.contact-cta):focus-visible {
+  border-radius: 4px;
+  outline: 3px solid var(--yomm-ember-focus);
+  outline-offset: 3px;
+}
+
+.contact-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 72px;
+  margin-top: 56px;
+  margin-bottom: 80px;
+  padding: 0 36px;
+  border-radius: 10px;
+  background: var(--yomm-ember);
+  box-shadow: 0 10px 0 var(--yomm-ember-shadow);
+  color: var(--yomm-porcelain);
+  font-family: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+  font-size: clamp(1.1rem, 2.4vmin, 1.35rem);
+  font-weight: 750;
+  line-height: 1;
+  text-decoration: none;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.contact-cta:hover {
+  transform: translateY(2px);
+  box-shadow: 0 8px 0 var(--yomm-ember-shadow);
+}
+
+.contact-cta:active {
+  transform: translateY(8px);
+  box-shadow: 0 2px 0 var(--yomm-ember-shadow);
+}
+
+.contact-cta:focus-visible {
+  outline: 3px solid var(--yomm-ember-focus);
+  outline-offset: 6px;
+}
+
+@media (max-width: 480px) {
+
+  header,
+  main,
+  .home-nav {
+    width: min(100% - 28px, 720px);
+  }
+
+  .home-nav {
+    padding-top: 12px;
+  }
+
+  header {
+    padding-top: 8px;
+  }
+
+  main {
+    padding-top: 28px;
+  }
+}
